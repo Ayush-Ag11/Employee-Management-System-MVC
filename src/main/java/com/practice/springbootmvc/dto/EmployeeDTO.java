@@ -12,12 +12,12 @@ public class EmployeeDTO {
     private Long id;
 
     @NotBlank(message = "Name of employee can not be blank")
+    @Size(min = 3, max = 8, message = "Number of characters in age should be in the range :[3,8]")
     private String name;
 
     @Email(message = "email should be a valid email")
     private String email;
 
-    @Size(min = 2, max = 3, message = "Number of characters in age should be in the range :[2,3]")
     @Max(value = 60, message = "age cannot be more than 60")
     @Min(value = 18, message = "age cannot be less than 18")
     private Integer age;
