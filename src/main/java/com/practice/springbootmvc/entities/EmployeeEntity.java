@@ -26,4 +26,6 @@ public class EmployeeEntity {
 
     private String department;
 
+    private Double salary;
+
 }
