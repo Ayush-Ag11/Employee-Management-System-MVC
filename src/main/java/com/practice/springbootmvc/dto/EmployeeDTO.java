@@ -1,6 +1,6 @@
 package com.practice.springbootmvc.dto;
 
-import annotations.EmployeeRoleValidation;
+import com.practice.springbootmvc.annotations.EmployeeRoleValidation;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 

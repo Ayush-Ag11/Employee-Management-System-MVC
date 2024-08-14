@@ -1,4 +1,4 @@
-package annotations;
+package com.practice.springbootmvc.annotations;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
