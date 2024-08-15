@@ -2,7 +2,7 @@ This project is a ***web-based employee management system (EMS)*** that was buil
 
 # Custom Validation and Exceptions:
 
-EmployeeRoleValidation Annotation: 
+<u>EmployeeRoleValidation Annotation:</u> 
 This custom annotation is used to validate an employee's department, ensuring it is either "CS" or "IT".
 
 EmployeeRoleValidator Class: 
