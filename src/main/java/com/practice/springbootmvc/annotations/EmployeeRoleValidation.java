@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 )
 public @interface EmployeeRoleValidation {
 
-    String message() default "Department of employee can be CS or IT";
+    String message() default "Enter valid Department name";
 
     Class<?>[] groups() default {};
 

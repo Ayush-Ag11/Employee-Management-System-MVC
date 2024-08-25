@@ -5,6 +5,7 @@ import com.practice.springbootmvc.entities.EmployeeEntity;
 import com.practice.springbootmvc.exceptions.ResourceNotFoundException;
 import com.practice.springbootmvc.repositories.EmployeeRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +31,22 @@ public class EmployeeService {
         return employeeRepository.findById(id).map((employeeEntity -> modelMapper.map(employeeEntity, EmployeeDTO.class)));
     }
 
-    public List<EmployeeDTO> getAllEmployees() {
-        List<EmployeeEntity> employeeEntities = employeeRepository.findAll();
+    public List<EmployeeDTO> getAllEmployees(Pageable page) {
+        List<EmployeeEntity> employeeEntities = employeeRepository.findAll(page).getContent();
+        return employeeEntities.stream()
+                .map(employeeEntity -> modelMapper.map(employeeEntity, EmployeeDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<EmployeeDTO> findAllEmployeeByAgeBetween(int startAge, int endAge, Pageable page) {
+        List<EmployeeEntity> employeeEntities = employeeRepository.findByAgeBetween(startAge, endAge, page);
+        return employeeEntities.stream()
+                .map(employeeEntity -> modelMapper.map(employeeEntity, EmployeeDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<EmployeeDTO> findBySalaryGreaterThanAndAgeBetween(double salary, int startAge, int endAge, Pageable pageable) {
+        List<EmployeeEntity> employeeEntities = employeeRepository.findBySalaryGreaterThanAndAgeBetween(salary, startAge, endAge, pageable);
         return employeeEntities.stream()
                 .map(employeeEntity -> modelMapper.map(employeeEntity, EmployeeDTO.class))
                 .collect(Collectors.toList());

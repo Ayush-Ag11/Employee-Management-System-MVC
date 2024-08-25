@@ -1,6 +1,6 @@
 package com.practice.springbootmvc.dto;
 
-import com.practice.springbootmvc.annotations.EmployeeRoleValidation;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -28,13 +28,11 @@ public class EmployeeDTO {
     @AssertTrue(message = "Employee should be active")
     private Boolean isActive;
 
-    @NotBlank(message = "role of employee can not be blank")
-    @EmployeeRoleValidation
-    private String department;
-
     @Digits(integer = 8, fraction = 2, message = "Employee salary cannot have more than 8 digits")
     @DecimalMin(value = "10000.99")
     @DecimalMax(value = "10000000.99")
     private Double salary;
 
+    @JsonIgnore
+    private DepartmentDTO managedDepartment;
 }

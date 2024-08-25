@@ -1,5 +1,6 @@
 package com.practice.springbootmvc.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,8 +38,10 @@ public class EmployeeEntity {
 
     private Boolean isActive;
 
-    private String department;
-
     private Double salary;
+
+    @OneToOne(mappedBy = "manager")
+    @JsonIgnore
+    private DepartmentEntity managedDepartment;
 
 }

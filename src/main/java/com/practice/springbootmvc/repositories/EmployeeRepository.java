@@ -1,6 +1,7 @@
 package com.practice.springbootmvc.repositories;
 
 import com.practice.springbootmvc.entities.EmployeeEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -28,4 +29,10 @@ public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Long> 
 
     @Query("select count(e) from EmployeeEntity e where e.name= : name and e.email = : email")
     Long countByNameAndEmail(String name, String email);
+
+    @Query("select e from EmployeeEntity e where e.age between ?1 and ?2")
+    List<EmployeeEntity> findByAgeBetween(int startAge, int endAge, Pageable page);
+
+    @Query("select e from EmployeeEntity e where e.salary > ?1 and e.age between ?2 and ?3")
+    List<EmployeeEntity> findBySalaryGreaterThanAndAgeBetween(double salary, int startAge, int endAge, Pageable pageable);
 }

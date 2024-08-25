@@ -4,6 +4,9 @@ import com.practice.springbootmvc.dto.EmployeeDTO;
 import com.practice.springbootmvc.exceptions.ResourceNotFoundException;
 import com.practice.springbootmvc.services.EmployeeService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +19,7 @@ import java.util.Optional;
 @RequestMapping("/employee")
 public class EmployeeController {
 
+    public static final int PAGE_SIZE = 5;
     private final EmployeeService employeeService;
 
     public EmployeeController(EmployeeService employeeService) {
@@ -30,10 +34,35 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<EmployeeDTO>> getAllEmployees(@RequestParam(required = false) String department,
-                                                             @RequestParam(required = false) String name) {
-        return ResponseEntity.ok(employeeService.getAllEmployees());
+    public ResponseEntity<List<EmployeeDTO>> getAllEmployees(@RequestParam(defaultValue = "0") int page,
+                                                             @RequestParam(defaultValue = "id") String sort,
+                                                             @RequestParam(defaultValue = "asc") String direction) {
+        return ResponseEntity.ok(employeeService.getAllEmployees(createPageable(page, sort, direction)));
     }
+
+    @GetMapping("/age")
+    public ResponseEntity<List<EmployeeDTO>>
+    getAllEmployeesByAgeBetween(@RequestParam(name = "startAge") int startAge,
+                                @RequestParam(name = "endAge") int endAge,
+                                @RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "id") String sort,
+                                @RequestParam(defaultValue = "asc") String direction) {
+        return ResponseEntity.ok(employeeService.findAllEmployeeByAgeBetween(startAge, endAge,
+                createPageable(page, sort, direction)));
+    }
+
+    @GetMapping("/salary")
+    public ResponseEntity<List<EmployeeDTO>>
+    getAllEmployeesBySalaryGreaterThanAndAgeBetween(@RequestParam() double salary,
+                                                    @RequestParam(name = "startAge") int startAge,
+                                                    @RequestParam(name = "endAge") int endAge,
+                                                    @RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "id") String sort,
+                                                    @RequestParam(defaultValue = "asc") String direction) {
+        return ResponseEntity.ok(employeeService.findBySalaryGreaterThanAndAgeBetween(salary, startAge, endAge,
+                createPageable(page, sort, direction)));
+    }
+
 
     @PostMapping
     public ResponseEntity<EmployeeDTO> createNewEmployee(@RequestBody @Valid EmployeeDTO employeeDTO) {
@@ -60,5 +89,9 @@ public class EmployeeController {
         EmployeeDTO employeeDTO = employeeService.updatePartialEmployeeById(id, updates);
         if (employeeDTO == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(employeeDTO);
+    }
+
+    private Pageable createPageable(int page, String sort, String direction) {
+        return PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.fromString(direction), sort));
     }
 }
